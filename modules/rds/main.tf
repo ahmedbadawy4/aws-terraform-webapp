@@ -1,14 +1,14 @@
 resource "aws_db_instance" "default" {
-  identifier             = "${var.IDENTIFIER}"
-  allocated_storage      = "${var.ALLOCATED_STORAGE}"
-  engine                 = "${var.ENGINE}"
-  engine_version         = "${lookup(var.ENGINE_VERSION, var.ENGINE)}"
-  instance_class         = "${var.INSTANCE_CLASS}"
-  name                   = "${var.DB_NAME}"
-  username               = "${var.DB_USERNAME}"
-  password               = "${var.DB_PASSWORD}"
-  vpc_security_group_ids = ["${var.DB_SG_ID}"]
-  db_subnet_group_name   = "${var.DB_SUBNET_ID}"
-  skip_final_snapshot    = "true"
-  publicly_accessible    = "true"
+  identifier                    = local.identifier
+  allocated_storage             = var.allocated_storage
+  engine                        = var.engine
+  engine_version                = var.engine_version[var.engine]
+  instance_class                = var.instance_class
+  db_name                       = "${local.identifier}-db"
+  username                      = var.db_username
+  manage_master_user_password   = true
+  master_user_secret_kms_key_id = var.kms_key_id
+  vpc_security_group_ids        = [var.db_sg_id]
+  db_subnet_group_name          = var.db_subnet_id
+  skip_final_snapshot           = "true" # disable create snapshot when deleting RDS for cost saving.
 }

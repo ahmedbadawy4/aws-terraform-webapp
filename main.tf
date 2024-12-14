@@ -1,40 +1,33 @@
-provider "aws" {
-  region  = "us-east-1"
-  profile = "gfg"
-}
-
 module "vpc" {
-  source = "./modules/vpc"
-  AZ_1   = "us-east-1a"
-  AZ_2   = "us-east-1b"
-
+  source                 = "./modules/vpc"
+  environment            = var.environment
+  application            = var.application
+  destination_cidr_block = var.destination_cidr_block
 }
 
 module "rds" {
-  source            = "./modules/rds"
-  IDENTIFIER        = "gfg-rds"
-  ALLOCATED_STORAGE = "16"
-  ENGINE            = "postgres"
-  INSTANCE_CLASS    = "db.t2.micro"
-  DB_USERNAME       = "gfguser"
-  DB_PASSWORD       = "${module.secrets.pg_password}"
-  DB_SG_ID          = "${module.vpc.sg_postgres_id}"
-  DB_SUBNET_ID      = "${module.vpc.default_subnet_group_id}"
+  source       = "./modules/rds"
+  environment  = var.environment
+  application  = var.application
+  db_subnet_id = module.vpc.default_subnet_group_id
+  db_sg_id     = module.vpc.sg_postgres_id
+  kms_key_id   = module.iam-secrets.kms_key_id
+
 }
 
 module "ec2" {
-  source        = "./modules/ec2/"
-  INSTANCE_TYPE = "t2.micro"
-  KEY_NAME      = "aws"
-  VOLUME_SIZE   = "16"
-  EC2_SUBNET    = "${module.vpc.subnet1_id}"
-  EC2_SG        = "${module.vpc.sg_ec2_id}"
-  EC2ROLE_NAME  = "${module.secrets.ec2role_name}"
+  source           = "./modules/ec2/"
+  environment      = var.environment
+  application      = var.application
+  aws_subnet       = module.vpc.main_subnet_id
+  aws_keypair_name = var.aws_keypair_name
+  ec2_sg           = module.vpc.sg_ec2_id
 
 }
 
-module "secrets" {
-  source         = "./modules/secrets/"
-  DB_PASSWORD    = "${module.rds.db_password}"
-  KMS_ALIAS_NAME = "alias/rds-key-alias"
+module "iam-secrets" {
+  source      = "./modules/iam-secrets/"
+  environment = var.environment
+  application = var.application
+
 }

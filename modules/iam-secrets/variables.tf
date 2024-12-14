@@ -13,13 +13,3 @@ variable "environment" {
   description = "environment name"
   type        = string
 }
-
-variable "destination_cidr_block" {
-  description = "CIDR block for the route"
-  type        = string
-}
-
-variable "aws_keypair_name" {
-  description = "aws keypair pre-defined in aws"
-  type        = string
-}

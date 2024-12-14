@@ -1,24 +1,41 @@
-variable "INSTANCE_TYPE" {
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+  default     = "us-east-1"
+}
+variable "instance_type" {
   description = "instance_type"
+  type        = string
+  default     = "t2.micro"
 }
 
-variable "KEY_NAME" {
-  description = "key_name"
+variable "aws_keypair_name" {
+  description = "aws keypair pre-defined in aws"
+  type        = string
 }
 
-variable "VOLUME_SIZE" {
+variable "ec2_volume_size" {
   description = "root volume size"
+  type        = number
+  default     = 20
 }
 
-variable "EC2_SUBNET" {
-  description = "subnet id come from vpc module"
-  type        = "string"
+variable "aws_subnet" {
+  description = "subnet id"
+  type        = string
 }
 
-variable "EC2_SG" {
-  description = "security group ID come from vpc module"
+variable "ec2_sg" {
+  description = "security group ID"
+  type        = string
 }
 
-variable "EC2ROLE_NAME" {
-  description = "allow ec2 role name"
+variable "application" {
+  description = "application name"
+  type        = string
+}
+
+variable "environment" {
+  description = "environment name"
+  type        = string
 }

@@ -1,50 +1,62 @@
-variable "IDENTIFIER" {
-  default     = "gfgdb-rds"
-  description = "Identifier for DB"
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+  default     = "us-east-1"
 }
 
-variable "ALLOCATED_STORAGE" {
-  default     = "20"
-  description = "allocated_storage size in GB"
+variable "application" {
+  description = "application name"
+  type        = string
 }
 
-variable "ENGINE" {
-  default     = "postgres"
+variable "environment" {
+  description = "environment name"
+  type        = string
+}
+
+variable "allocated_storage" {
+  description = "Allocated storage size in GB"
+  type        = number
+  default     = 20
+}
+
+variable "engine" {
   description = "Engine type"
+  type        = string
+  default     = "postgres"
 }
 
-variable "ENGINE_VERSION" {
+variable "engine_version" {
   description = "Engine version"
-
+  type        = map(string)
   default = {
-    postgres = "9.6.11"
+    postgres = "17.2"
   }
 }
 
-variable "INSTANCE_CLASS" {
-  default     = "db.t2.micro"
+variable "instance_class" {
   description = "Instance class"
+  type        = string
+  default     = "db.t2.micro"
 }
 
-variable "DB_NAME" {
-  default     = "gfgdb"
-  description = "db name"
-}
-
-variable "DB_USERNAME" {
+variable "db_username" {
+  description = "Database username"
+  type        = string
   default     = "gfguser"
-  description = "User name"
 }
 
-variable "DB_PASSWORD" {
-  description = "password"
-  default     = "password123"
+variable "db_sg_id" {
+  description = "Postgres security group ID"
+  type        = string
 }
 
-variable "DB_SG_ID" {
-  description = "postgres security group id"
+variable "db_subnet_id" {
+  description = "Postgres subnet group ID"
+  type        = string
 }
 
-variable "DB_SUBNET_ID" {
-  description = "postgress group subnet id "
+variable "kms_key_id" {
+  description = "KMS key ID for database master user password"
+  type        = string
 }

@@ -1,24 +1,38 @@
-variable "VPC_CIDR" {
+variable "aws_region" {
+  description = "aws region"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "application" {
+  description = "application name"
+  type        = string
+}
+
+variable "environment" {
+  description = "environment name"
+  type        = string
+}
+
+variable "vpc_cidr" {
+  description = "CIDR for VPC"
+  type        = string
   default     = "10.0.0.0/16"
-  description = "CIDR for vpc"
 }
 
-variable "SUBNET_1_CIDR" {
+variable "subnet_1_cidr" {
+  description = "Subnet for the first Availability Zone"
+  type        = string
   default     = "10.0.1.0/24"
-  description = "subnet for the first Availability Zone"
 }
 
-variable "SUBNET_2_CIDR" {
+variable "subnet_2_cidr" {
+  description = "Subnet for the second Availability Zone"
+  type        = string
   default     = "10.0.2.0/24"
-  description = "subnet for the second Availability Zone"
 }
 
-variable "AZ_1" {
-  default     = "us-west-1b"
-  description = "first Availability Zone"
-}
-
-variable "AZ_2" {
-  default     = "us-west-1a"
-  description = "second Availability Zone"
+variable "destination_cidr_block" {
+  description = "CIDR block for the route"
+  type        = string
 }
