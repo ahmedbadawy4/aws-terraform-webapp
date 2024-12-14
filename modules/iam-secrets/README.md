@@ -5,7 +5,7 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 2.3 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.6 |
 
 ## Providers
 
@@ -49,4 +49,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_ec2role_name"></a> [ec2role\_name](#output\_ec2role\_name) | n/a |
+| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

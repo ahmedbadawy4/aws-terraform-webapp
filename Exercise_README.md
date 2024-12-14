@@ -1,20 +1,9 @@
-# terraform-gfg
-# Terraform Exercise
+# aws-terraform webapp
 
-We want to see a basic web application displaying content from a database. This can be as simple as a 'Hello World'.
+Using Terraform to deploy basic web application displaying content from a database. This is as simple as a 'Hello World'.
 
 ## Repository and Coding Standard
 
-You have two weeks time to complete this exercise and can create as many PRs as you want. I will review every PR and give you feedback
-if you want. You will run the terraform code in your own AWS account and we will reimburse you with 25$ as soon as possible that you don't have any extra costs because of the exercise.
-
-It's very important for us to have a good code style, so please run `terraform fmt -recursive` in the top level directory to format your terraform
-code according to the HashiCorp standards.
-
-*Basics:*
-
-- Create a new repository on GitHub and work in a `development` branch
-- Run `terraform fmt` before you submit a PR
 - Create a new VPC and setup all the dependencies to get a module which we can try out on our side
 - Create a terraform module and make it configurable where you think it makes sense, but provide defaults
 - Provide an environment where you run your module and provide non-secrect variables

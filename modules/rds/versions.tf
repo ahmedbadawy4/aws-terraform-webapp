@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {}
   required_version = "~> 1.3"
   required_providers {
     aws = {

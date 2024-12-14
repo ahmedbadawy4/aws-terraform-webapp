@@ -32,18 +32,6 @@ variable "subnet_2_cidr" {
   default     = "10.0.2.0/24"
 }
 
-variable "az_1" {
-  description = "First Availability Zone"
-  type        = string
-  default     = "us-east-1a"
-}
-
-variable "az_2" {
-  description = "Second Availability Zone"
-  type        = string
-  default     = "us-east-1b"
-}
-
 variable "destination_cidr_block" {
   description = "CIDR block for the route"
   type        = string

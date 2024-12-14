@@ -23,7 +23,7 @@ resource "aws_db_subnet_group" "default" {
 resource "aws_subnet" "subnet_1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.subnet_1_cidr
-  availability_zone       = var.az_1
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = "true"
   tags = {
     Name = "subnet1"
@@ -33,7 +33,7 @@ resource "aws_subnet" "subnet_1" {
 resource "aws_subnet" "subnet_2" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.subnet_2_cidr
-  availability_zone       = var.az_2
+  availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = "true"
   tags = {
     Name = "subnet2"

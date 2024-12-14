@@ -3,12 +3,11 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {}
   required_version = "~> 1.3"
   required_providers {
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3"
+      version = "~> 3.6"
     }
     aws = {
       source  = "hashicorp/aws"
