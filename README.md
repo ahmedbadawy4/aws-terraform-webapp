@@ -1,12 +1,6 @@
-<<<<<<< Updated upstream
-# Terraform Exercise 
-=======
 # Terraform Provisioning of basic and simple webapp
-Hello world App with Ec2 and PostgreSQL on AWS
->>>>>>> Stashed changes
-
-- Terraform code to provision fully operated environment consists of EC2 act as an application and PostgreSQL database 
-- All components are in the same vpc with no public access for the database except from and to Ec2 private subnet and Ec2 is only public accessible on 80 and 22 from target subnet.  
+ Terraform code to provision fully operated environment consists of EC2 act as an application and PostgreSQL database 
+ All components are in the same vpc with no public access for the database except from and to Ec2 private subnet and Ec2 is only public accessible on 80 and 22 from target subnet.  
 
 - The code made consists of a modules to easily reuse it 
 
@@ -36,11 +30,6 @@ Hello world App with Ec2 and PostgreSQL on AWS
 - Run `terraform plan`
     check the what will changes/new resources that planned. 
 - Run `terraform apply`
-- get outputs:
-```
-terraform output Ec2_public_ip    # to get Ec2 public IP
-terraform output db_host          # to et Ec2 Host
-```
 
 - Get the master database password 
 
@@ -66,3 +55,5 @@ psql --host=<databasehost> --port=5432 --username=<database_user> --password --d
 - Enhance networkng.
 - Enhance the Database configurations and enable backup.
 - refactor the code to Terraform CDK typescript or python.
+- Create CI/CD pipeline
+- Add Ansible script to install nessesary packages on the ec2 instance.
