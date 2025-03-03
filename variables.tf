@@ -20,6 +20,6 @@ variable "destination_cidr_block" {
 }
 
 variable "aws_keypair_name" {
-  description = "aws keypair pre-defined in aws"
+  description = "aws keypair to be created"
   type        = string
 }
