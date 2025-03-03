@@ -15,12 +15,23 @@ module "rds" {
 
 }
 
+module "ec2_key" {
+  source     = "./modules/ec2-key/"
+  aws_region = var.aws_region
+  key_name   = var.aws_keypair_name
+}
+
+resource "aws_key_pair" "generated_key" {
+  key_name   = "generated-key"
+  public_key = module.ec2_key.public_key_value
+}
+
 module "ec2" {
   source           = "./modules/ec2/"
   environment      = var.environment
   application      = var.application
   aws_subnet       = module.vpc.main_subnet_id
-  aws_keypair_name = var.aws_keypair_name
+  aws_keypair_name = aws_key_pair.generated_key.key_name
   ec2_sg           = module.vpc.sg_ec2_id
 
 }
