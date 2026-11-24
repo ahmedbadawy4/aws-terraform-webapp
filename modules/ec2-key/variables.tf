@@ -1,11 +1,4 @@
-variable "aws_region" {
-  description = "aws region"
-  type        = string
-  default     = "us-east-1"
-}
-
 variable "key_name" {
-  description = "The name of the key pair"
+  description = "Name of the EC2 key pair. The private key file is named <key_name>.pem."
   type        = string
-  default     = "ec2-key"
 }

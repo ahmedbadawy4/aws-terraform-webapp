@@ -1,47 +1,61 @@
 resource "aws_kms_key" "this" {
-  description = "KMS key to encyrept rds master password"
+  description             = "Encrypts the ${local.resource_name} database storage and its master password secret"
+  enable_key_rotation     = true
+  deletion_window_in_days = 7
+
+  tags = {
+    Name = local.resource_name
+  }
 }
 
 resource "aws_kms_alias" "this" {
-  name          = "${local.resource_name}-key"
+  name          = "alias/${local.resource_name}-key"
   target_key_id = aws_kms_key.this.key_id
 }
 
-resource "aws_ssm_parameter" "this" {
-  name   = "${local.resource_name}-db-password"
-  type   = "SecureString"
-  value  = random_password.this.result
-  key_id = aws_kms_key.this.key_id
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
 }
 
-resource "aws_iam_policy" "SSMRead" {
-  name        = "ssmReadOnly"
-  description = "Allow get, describe and list parameters store"
-  policy      = data.aws_iam_policy_document.ssm_policy.json
+resource "aws_iam_role" "ec2" {
+  name               = "${local.resource_name}-ec2"
+  description        = "Role of the ${local.resource_name} EC2 instance"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-resource "aws_iam_policy" "kmsEncryptDecrept" {
-  name        = "kmsEncryptDecrept"
-  description = "Allow encrypt and decrept on rds_kms"
-  policy      = data.aws_iam_policy_document.kms_policy.json
+# The role can read one secret and decrypt with one key. Nothing else.
+data "aws_iam_policy_document" "read_db_secret" {
+  statement {
+    sid       = "ReadDatabaseSecret"
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
+    resources = [var.db_secret_arn]
+  }
+
+  # IAM checks key permissions against the key ARN, not the alias ARN.
+  statement {
+    sid       = "DecryptWithProjectKey"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = [aws_kms_key.this.arn]
+  }
 }
 
-resource "aws_iam_role" "this" {
-  name               = "${local.resource_name}-role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+resource "aws_iam_role_policy" "read_db_secret" {
+  name   = "read-db-secret"
+  role   = aws_iam_role.ec2.id
+  policy = data.aws_iam_policy_document.read_db_secret.json
 }
 
-resource "aws_iam_role_policy_attachment" "policy1Attachment" {
-  role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.SSMRead.arn
-}
-
-resource "aws_iam_role_policy_attachment" "policy2Attachment" {
-  role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.kmsEncryptDecrept.arn
-}
-
-resource "random_password" "this" {
-  length  = "12"
-  special = false
+resource "aws_iam_instance_profile" "this" {
+  name = "${local.resource_name}-ec2"
+  role = aws_iam_role.ec2.name
 }

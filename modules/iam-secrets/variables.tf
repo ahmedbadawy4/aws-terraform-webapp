@@ -1,15 +1,14 @@
-variable "aws_region" {
-  description = "aws region"
+variable "environment" {
+  description = "Environment name, for example dev or prod."
   type        = string
-  default     = "us-east-1"
 }
 
 variable "application" {
-  description = "application name"
+  description = "Application name."
   type        = string
 }
 
-variable "environment" {
-  description = "environment name"
+variable "db_secret_arn" {
+  description = "ARN of the Secrets Manager secret that holds the database master password."
   type        = string
 }

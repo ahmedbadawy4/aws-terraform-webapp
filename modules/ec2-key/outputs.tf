@@ -1,13 +1,9 @@
+output "key_name" {
+  description = "Name of the EC2 key pair."
+  value       = aws_key_pair.this.key_name
+}
+
 output "private_key_path" {
-  description = "Path to the private SSH key"
-  value       = local_file.private_key.filename
-}
-
-output "public_key_path" {
-  value = local_file.public_key.filename
-}
-
-output "public_key_value" {
-  description = "Public SSH Key Value"
-  value       = tls_private_key.ec2_key.public_key_openssh
+  description = "Path of the private key file."
+  value       = local_sensitive_file.private_key.filename
 }

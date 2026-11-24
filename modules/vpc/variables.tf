@@ -1,38 +1,38 @@
-variable "aws_region" {
-  description = "aws region"
+variable "environment" {
+  description = "Environment name, for example dev or prod."
   type        = string
-  default     = "us-east-1"
 }
 
 variable "application" {
-  description = "application name"
-  type        = string
-}
-
-variable "environment" {
-  description = "environment name"
+  description = "Application name."
   type        = string
 }
 
 variable "vpc_cidr" {
-  description = "CIDR for VPC"
+  description = "CIDR block of the VPC."
   type        = string
   default     = "10.0.0.0/16"
 }
 
 variable "subnet_1_cidr" {
-  description = "Subnet for the first Availability Zone"
+  description = "CIDR block of the first subnet. It is created in the first availability zone."
   type        = string
   default     = "10.0.1.0/24"
 }
 
 variable "subnet_2_cidr" {
-  description = "Subnet for the second Availability Zone"
+  description = "CIDR block of the second subnet. It is created in the second availability zone."
   type        = string
   default     = "10.0.2.0/24"
 }
 
-variable "destination_cidr_block" {
-  description = "CIDR block for the route"
-  type        = string
+variable "allowed_cidr_blocks" {
+  description = "CIDR blocks that may reach the EC2 instance on ports 22 and 80. Empty means no access from outside the VPC."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for cidr in var.allowed_cidr_blocks : can(cidrhost(cidr, 0))])
+    error_message = "Every entry must be a valid IPv4 CIDR block, for example 203.0.113.10/32."
+  }
 }

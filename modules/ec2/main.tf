@@ -1,29 +1,39 @@
-resource "aws_iam_role" "ec2_role" {
-  name               = "${local.resource_name}-ec2-role"
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role_policy.json
-}
-resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "${local.resource_name}-ec2-instance-profile"
-  role = aws_iam_role.ec2_role.name
-}
-
-resource "aws_instance" "amazone_ec2" {
-  ami                    = data.aws_ami.amazon_linux_2.id
+resource "aws_instance" "this" {
+  ami                    = data.aws_ami.amazon_linux_2023.id
   instance_type          = var.instance_type
-  key_name               = var.aws_keypair_name
-  subnet_id              = var.aws_subnet
-  vpc_security_group_ids = [var.ec2_sg]
-  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
-  user_data              = <<-EOF
-              #!/bin/bash
-              sudo yum update -y
-              sudo yum install postgresql -y
-              EOF
-  root_block_device {
-    volume_size           = var.ec2_volume_size
-    delete_on_termination = "true"
+  key_name               = var.key_pair_name
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [var.security_group_id]
+  iam_instance_profile   = var.iam_instance_profile
+
+  # Installs the PostgreSQL client so the instance can reach the database with psql.
+  user_data = <<-EOF
+    #!/bin/bash
+    dnf install -y postgresql17
+  EOF
+
+  user_data_replace_on_change = true
+
+  # Require IMDSv2 session tokens for the instance metadata service.
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
   }
+
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = var.root_volume_size
+    encrypted             = true
+    delete_on_termination = true
+  }
+
   tags = {
-    Name = "${local.resource_name}-ec2"
+    Name = local.resource_name
+  }
+
+  # A newer Amazon Linux release must not replace a running instance by surprise.
+  # To pick up a new image, run: terraform apply -replace=module.ec2.aws_instance.this
+  lifecycle {
+    ignore_changes = [ami]
   }
 }

@@ -1,6 +1,14 @@
-output "ec2_public_ip" {
-  value = aws_instance.amazone_ec2.public_ip
+output "instance_id" {
+  description = "ID of the EC2 instance."
+  value       = aws_instance.this.id
 }
+
+output "ec2_public_ip" {
+  description = "Public IP address of the EC2 instance."
+  value       = aws_instance.this.public_ip
+}
+
 output "ec2_private_ip" {
-  value = aws_instance.amazone_ec2.private_ip
+  description = "Private IP address of the EC2 instance."
+  value       = aws_instance.this.private_ip
 }
