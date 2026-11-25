@@ -124,3 +124,7 @@ pre-commit run --all-files
 - The database defaults suit a short-lived setup: a single burstable instance, `deletion_protection = false` and `skip_final_snapshot = true`. Change them before you store data you need to keep.
 - A newer Amazon Linux image does not replace a running instance. To move to a new image, run `terraform apply -replace=module.ec2.aws_instance.this`.
 - There are no VPC flow logs, no alarms and no account-level controls such as CloudTrail or AWS Config in this repository.
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE).

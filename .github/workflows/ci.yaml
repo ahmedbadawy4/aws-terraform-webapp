@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
         with:
           terraform_version: 1.17.2
           terraform_wrapper: false
@@ -34,7 +34,7 @@ jobs:
       - name: Validate
         run: terraform validate
 
-      - uses: terraform-linters/setup-tflint@v6
+      - uses: terraform-linters/setup-tflint@6ffdbaa3be476b3431f7275c26966ef32ff60337 # v6
         with:
           tflint_version: v0.66.0
 
@@ -47,7 +47,7 @@ jobs:
 
       # Advisory: findings are shown in the log but do not fail the job.
       - name: Scan with Checkov
-        uses: bridgecrewio/checkov-action@v12
+        uses: bridgecrewio/checkov-action@b782b35c8411ff565b881fba67ceebdb426d7dc4 # v12
         with:
           directory: .
           framework: terraform
@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
         with:
           terraform_version: 1.17.2
           terraform_wrapper: false
